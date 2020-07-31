@@ -291,7 +291,7 @@ main(void)
 
 	am_util_stdio_printf("customer_info_signature status: %d\n",am_hal_flash_customer_info_signature_check());
 	am_util_stdio_printf("wipe_flash_enable status: %d\n",am_hal_flash_wipe_flash_enable_check());
-	am_util_stdio_printf("am_hal_flash_write_protect_check %d",am_hal_flash_write_protect_check((uint32_t *)0x80000,(uint32_t *)(0x80000+(16*1024)-1)));
+	am_util_stdio_printf("am_hal_flash_copy_protect_check %d",am_hal_flash_copy_protect_check((uint32_t *)0x80000,(uint32_t *)(0x80000+(16*1024)-1)));
 	
     //am_hal_flash_wipe_flash_enable
     // Loop forever.
@@ -327,10 +327,11 @@ main(void)
 			//Entry critical section
 			ui32Primask = am_hal_interrupt_master_disable();
 			bret = am_hal_flash_info_signature_set();
-			ret = am_hal_flash_write_protect_set((uint32_t *)0x80000,(uint32_t *)(0x80000+(16*1024)-1));
-			ret = am_hal_flash_info_erase_disable();
+			ret = am_hal_flash_copy_protect_set((uint32_t *)0x80000,(uint32_t *)(0x80000+(16*1024)-1));
+			//ret = am_hal_flash_info_erase_disable();
 			//Exit critical section
 			am_hal_interrupt_master_set(ui32Primask);
+			am_util_stdio_printf(" am_hal_flash_copy_protect_set ret=%x\n",ret);
 			
 		}
 		

@@ -53,7 +53,8 @@ define memory mem with size = 4G;
 //
 // Define a region for the flash.
 //
-define region FLASH = mem:[from 0x00000000 to 0x00100000];
+define region FLASH = mem:[from 0x00000000 to 0x0007FFFF];
+define region FLASH_read_protected = mem:[from 0x00080000 to 0x00100000];
 
 //
 // Define a region for the SRAM.
@@ -88,7 +89,11 @@ place at start of FLASH { readonly section .intvec };
 //
 // Place the remainder of the read-only items into flash.
 //
-place in FLASH { readonly };
+place in FLASH_read_protected { readonly section .text };
+place in FLASH { readonly section .rodata };
+place in FLASH { readonly section .data_init };
+place in FLASH { readonly section .iar.init_table };
+
 
 //
 // Place the stack at the start of SRAM.
